@@ -1,5 +1,7 @@
-POST http://localhost:8000/api/signin
+post http://127.0.0.1:8000/api/auth/signin
 Content-Type: application/json
+Accept: application/json
+
 {
     "email": "coba@coba.com",
     "password": "123"

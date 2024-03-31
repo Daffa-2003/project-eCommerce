@@ -21,8 +21,6 @@ Route::prefix('auth')->group(function () {
     Route::get('/signout', [AuthController::class, 'SignOut'])->middleware('auth:sanctum');
 });
 
-
-
 Route::get('/tokens', function (Request $request) {
     return $request->user()->tokens;
 })->middleware('auth:sanctum');
