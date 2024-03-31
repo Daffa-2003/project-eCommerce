@@ -1,0 +1,38 @@
+* {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.icon-nav {
+    color: #ffffff8c;
+}
+.icon-nav:hover {
+    color: white;
+}
+.notif {
+    position: relative;
+}
+.notif .circle {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    background-color: red;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: white;
+    text-align: center;
+    font-size: 12px;
+}
+section {
+    min-height: 80vh;
+}
+/* style footer */
+footer {
+    background-color: #344955;
+    color: white;
+    position: static;
+    bottom: 0;
+}
+
