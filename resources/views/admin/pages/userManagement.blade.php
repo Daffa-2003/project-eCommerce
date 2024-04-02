@@ -1,7 +1,7 @@
 @extends('admin.layout.index')
 
 @section('content')
-     <!-- Content Header (Page header) -->
+  <!-- Content Header (Page header) -->
  <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -50,14 +50,14 @@
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody >
             @foreach($data as $x)
-            <tr>
-              <td>{{$loop->iteration}}</td>
+            <tr >
+              <td >{{$loop->iteration}}</td>
               <td>
-                <img src="{{asset('storage/profil/'. $x->foto)}}" alt="foto" width="100px" height="100px">
+                <img src="{{asset('storage/profil/'. $x->foto)}}" alt="foto" width="100px" class=" elevation-3" style="border-radius: 25px" height="100px">
               </td>
-              <td>{{$x->created_at}}</td>
+              <td >{{$x->created_at}}</td>
               <td>{{$x->name}}</td>
               <td>
                 @if($x->role == 1)
@@ -75,21 +75,23 @@
                 @endif
               </td>
               <td>
-                <button class="btn btn-warning" id="editUser" data-id="{{$x->id}}"><i class="fa-solid fa-pencil"></i></button>
+                @if (Auth::user()->role == 2 || Auth::user()->name == $x->name)
+                <button class="btn btn-warning editUser"  data-id="{{$x->id}}"><i class="fa-solid fa-pencil"></i></button>
                 <button class="btn btn-danger deleteUser"  data-id="{{$x->id}}"><i class="fa-solid fa-trash"></i></button>
+                @endif
               </td>
             </tr>
             @endforeach
           </tbody>
         </table>
-        <div class="pagination d-flex flex-row justify-content-between mt-3">
+        {{-- <div class="pagination d-flex flex-row justify-content-between mt-3">
           <div class="showData">
             <span>Data ditampilkan {{$data->count()}} dari {{$data->total()}} </span>
           </div>
           <div>
             {{ $data->links() }}
           </div>
-        </div>
+        </div> --}}
       </div>
     </div>
     <div class="tampilData" style="display: none;"></div>
@@ -108,7 +110,7 @@
       })
     })
 
-    $('#editUser').click(function(e){
+    $('.editUser').click(function(e){
       e.preventDefault();
       var id = $(this).data('id');
       $.ajax({
@@ -120,6 +122,7 @@
         }
       })
     })
+
 
     $.ajaxSetup({
         headers: {

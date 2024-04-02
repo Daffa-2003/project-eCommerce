@@ -26,6 +26,7 @@ class User extends Authenticatable
         'alamat',
         'tlp',
         'tglLahir',
+        'role',
         'is_active',
         'is_admin',
         'is_user',

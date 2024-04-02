@@ -25,12 +25,13 @@ Route::get('/checkout', [Controller::class, 'checkout'])->name('checkout');
 Route::get('/admin', [Controller::class, 'adminLogin'])->name('adminLogin');
 Route::post('/admin/loginProses', [Controller::class, 'loginProses'])->name('loginProses');
 
-Route::group(['middleware'=>'admin'],function(){
+Route::group(['middleware' => 'admin'], function () {
     // Admin
     Route::get('/admin/logout', [Controller::class, 'logout'])->name('logout');
 
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin');
     Route::get('/admin/report', [AdminController::class, 'report'])->name('report');
+
 
     // user
     Route::get('/admin/user_management', [UserController::class, 'index'])->name('userManagement');
@@ -48,4 +49,3 @@ Route::group(['middleware'=>'admin'],function(){
     Route::put('/admin/product/updateData/{id}', [ProductController::class, 'update'])->name('updateData');
     Route::delete('/admin/product/deleteData/{id}', [ProductController::class, 'destroy'])->name('deleteData');
 });
-

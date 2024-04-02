@@ -3,6 +3,6 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "email": "coba@coba.com",
+    "email": "coba@gmail.com",
     "password": "123"
 }
