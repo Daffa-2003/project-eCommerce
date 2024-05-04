@@ -18,7 +18,10 @@ class transaksi extends Model
         'nama_pembeli',
         'alamat',
         'no_tlp',
-        'ekspedisi'
+        'ekspedisi',
+        'ongkir',
+        'bayar',
+        'kembali',
     ];
     protected $hidden = [];
 }

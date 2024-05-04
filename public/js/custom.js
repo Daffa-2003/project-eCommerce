@@ -1,52 +1,77 @@
 $(document).ready(function () {
-    var nilai = $("#qty").val();
-    var harga = $("#harga").val();
-    var total = $("#total").val();
-    var subtotal = parseInt(harga) * parseInt(nilai);
+    $(".plus").click(function (e) {
+        e.preventDefault();
+        var card = $(this).closest(".card-body");
+        var harga = card.find("#harga").val();
+        var qty = card.find("#qty").val();
 
-    if (nilai > 0) {
-        $("#total").val(subtotal);
-    }
+        var tambah = parseInt(qty) + 1;
+        card.find("#qty").val(tambah);
 
-    if (nilai == 0) {
-        $("#minus").prop("disabled", true);
-    }
+        var subtotal = parseInt(harga) * parseInt(tambah);
+        card.find(".total").val(subtotal);
 
-    $("#plus").click(function () {
-        var qty = $("#qty").val();
-        var jumlah = parseInt(qty) + parseInt(1);
-        $("#qty").val(jumlah);
-        var harga = $("#harga").val();
-        var subtotal = parseInt(harga) * parseInt(jumlah);
-        $("#total").val(subtotal);
-
-        if (jumlah > 0) {
-            $("#minus").prop("disabled", false);
+        if (qty > 0) {
+            card.find(".minus").prop("disabled", false);
         }
     });
-    $("#minus").click(function () {
-        var qty = $("#qty").val();
-        var jumlah = parseInt(qty) - parseInt(1);
-        $("#qty").val(jumlah);
-        var harga = $("#harga").val();
-        var subtotal = parseInt(harga) * parseInt(jumlah);
-        $("#total").val(subtotal);
 
-        if (jumlah == 0) {
-            $("#minus").prop("disabled", true);
+    $(".minus").click(function (e) {
+        e.preventDefault();
+        var card = $(this).closest(".card-body");
+        var harga = card.find("#harga").val();
+        var qty = card.find("#qty").val();
+
+        var tambah = parseInt(qty) - 1;
+        card.find("#qty").val(tambah);
+
+        var subtotal = parseInt(harga) * parseInt(tambah);
+        card.find(".total").val(subtotal);
+
+        if (qty <= 1) {
+            card.find(".minus").prop("disabled", true);
         }
+    });
+    $(".card-body").each(function () {
+        var card = $(this);
+        var harga = card.find("#harga").val();
+        var qty = card.find("#qty").val();
+        var total = parseInt(harga) * parseInt(qty);
+        card.find("#total").val(total);
     });
 });
 
 $(document).ready(function () {
-    var total_harga = $("#total_harga").val();
-    var discon = $("#discon").val();
-    var ongkir = $("#ongkir").val();
-    var total = parseInt(total_harga) + parseInt(ongkir) - parseInt(discon);
-    $("#total_bayar").val(total);
-    $("#bayar").on("input", function () {
-        var bayar = $("#bayar").val();
-        var kembali = parseInt(bayar) - parseInt(total);
-        $("#kembalian").val(kembali);
+    $(".eksp").change(function (e) {
+        e.preventDefault();
+        var eksp = $(".eksp").val();
+
+        if (eksp === "jnt") {
+            var ongkir = $(".ongkir").val(9000);
+        } else if (eksp === "jne") {
+            var ongkir = $(".ongkir").val(10000);
+        } else if (eksp === "sicepat") {
+            var ongkir = $(".ongkir").val(8000);
+        } else {
+            var ongkir = $(".ongkir").val(9500);
+        }
+
+        $(".pembayaran").each(function () {
+            var card = $(this);
+            var totalBelanja = card.find(".totalBelanja").val();
+            var disc = card.find(".discount").val();
+            var totalDisc = parseInt(totalBelanja) * parseFloat(disc);
+            var ongkir = card.find(".ongkir").val();
+
+            var subtotal = parseInt(totalBelanja) + parseInt(ongkir);
+            card.find(".dibayarkan").val(subtotal);
+            // card.find('.ppn').val(ppn);
+
+            $("#bayar").on("input", function () {
+                var bayar = $("#bayar").val();
+                var kembali = parseInt(bayar) - parseInt(subtotal);
+                $("#kembalian").val(kembali);
+            });
+        });
     });
 });

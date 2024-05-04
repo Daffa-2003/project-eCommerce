@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\detail_transaksi;
+use App\Models\product;
+use App\Models\tbl_cart;
+use App\Models\transaksi;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -18,33 +22,128 @@ class Controller extends BaseController
     // PELANGGAN
     public function index()
     {
+        $best = product::where('quantity_out', '>=', 5)->get();
+        $data = product::paginate(8);
+        $contKeranjang = tbl_cart::where(['idUser' => 'guest123', 'status' => 0])->count();
         return view('pelanggan.pages.home', [
             'title' => 'Home',
+            'data' => $data,
+            'best' => $best,
+            'keranjang' => $contKeranjang,
         ]);
     }
     public function shop()
     {
+        $contKeranjang = tbl_cart::where(['idUser' => 'guest123', 'status' => 0])->count();
+        $data = product::paginate(8);
         return view('pelanggan.pages.shop', [
             'title' => 'Shop',
+            'data' => $data, 'keranjang' => $contKeranjang,
         ]);
     }
+
+    public function shopProses(Request $request)
+    {
+        $type = $request->input('type');
+        $kategori = $request->input('kategori');
+        $data = product::where('kategori', $kategori, 'type', $type)->paginate(8);
+        return view('pelanggan.pages.shop', [
+            'title' => 'Shop',
+            'data' => $data,
+        ]);
+    }
+
     public function contact()
     {
+        $contKeranjang = tbl_cart::count();
         return view('pelanggan.pages.contact', [
-            'title' => 'Contact',
+            'title' => 'Contact', 'keranjang' => $contKeranjang,
         ]);
     }
     public function transaksi()
     {
+        $db = tbl_cart::with('product')->where(['idUser' => 'guest123', 'status' => 0])->get();
+        $contKeranjang = tbl_cart::where(['idUser' => 'guest123', 'status' => 0])->count();
         return view('pelanggan.pages.transaksi', [
             'title' => 'Transaksi',
+            'keranjang' => $contKeranjang,
+            'data' => $db,
         ]);
     }
     public function checkout()
     {
+        $contKeranjang = tbl_cart::where(['idUser' => 'guest123', 'status' => 0])->count();
+        $code = transaksi::count();
+        $codeTransaksi = date('Ymd') . $code;
+        $detailBelanja = detail_transaksi::where(['id_transaksi' => $codeTransaksi, 'status' => 0])->sum('price');
+        $jumlahBarng = detail_transaksi::where(['id_transaksi' => $codeTransaksi, 'status' => 0])->count('id_product');
+        $qtyBarang = detail_transaksi::where(['id_transaksi' => $codeTransaksi, 'status' => 0])->sum('qty');
         return view('pelanggan.pages.checkout', [
-            'title' => 'Checkout',
+            'title' => 'Checkout', 'keranjang' => $contKeranjang,
+            'detailBelanja' => $detailBelanja,
+            'jumlahBarng' => $jumlahBarng,
+            'qtyBarang' => $qtyBarang,
+            'codeTransaksi' => $codeTransaksi,
         ]);
+    }
+
+    public function prosesCheckout(Request $request, $id)
+    {
+        $data = $request->all();
+        $code = transaksi::count();
+        $codeTransaksi =  date('Ymd')  . $code;
+
+        // simpan detail barang
+        $detailModelTransaksi = new detail_transaksi();
+        $fieldDetail = [
+            'id_transaksi' => $codeTransaksi,
+            'id_product' => $data['idBarang'],
+            'qty' => $data['qty'],
+            'price' => $data['total'],
+        ];
+        $detailModelTransaksi::create($fieldDetail);
+
+        // update quantity barang
+        $fieldCart = [
+            'qty' => $data['qty'],
+            'price' => $data['total'],
+            'status' => 1,
+        ];
+        tbl_cart::where('id', $id)->update($fieldCart);
+        Alert::toast('Checkout Berhasil', 'success');
+        return redirect()->route('checkout');
+    }
+
+    public function prosesPembayaran(Request $request)
+    {
+        $data = $request->all();
+        // dd($data);die;
+        $dbTransaksi = new transaksi();
+        $dbTransaksi->code_transaksi = $data['kodeTransaksi'];
+        $dbTransaksi->total_qty = $data['qty'];
+        $dbTransaksi->total_harga = $data['totalBayar'];
+        $dbTransaksi->nama_pembeli = $data['namaPenerima'];
+        $dbTransaksi->alamat = $data['alamatPenerima'];
+        $dbTransaksi->no_tlp = $data['tlp'];
+        $dbTransaksi->ekspedisi = $data['ekspedisi'];
+        $dbTransaksi->ongkir = $data['ongkir'];
+        $dbTransaksi->bayar = $data['bayar'];
+        $dbTransaksi->kembali = $data['kembalian'];
+        $dbTransaksi->save();
+
+        $dataCart = detail_transaksi::where('id_transaksi', $data['kodeTransaksi'])->get();
+        foreach ($dataCart as $x) {
+            $dataUp = detail_transaksi::where('id', $x->id)->first();
+            $dataUp->status = 1;
+            $dataUp->save();
+
+            $dataProduct = product::where('id', $x->id_product)->first();
+            $dataProduct->quantity_out = $dataProduct->quantity_out + $x->qty;
+            $dataProduct->quantity = $dataProduct->quantity - $x->qty;
+            $dataProduct->save();
+        }
+        Alert::alert()->success('Transaksi berhasil', 'Ditunggu barangnya');
+        return redirect()->route('home');
     }
 
     public function adminLogin()

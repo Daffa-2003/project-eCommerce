@@ -14,13 +14,15 @@ return new class extends Migration
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
             $table->string('code_transaksi');
-            $table->string('sku_transaksi');
             $table->string('total_qty');
             $table->bigInteger('total_harga');
             $table->string('nama_pembeli');
             $table->string('alamat');
             $table->string('no_tlp');
             $table->string('ekspedisi');
+            $table->bigInteger('ongkir');
+            $table->bigInteger('bayar');
+            $table->bigInteger('kembali');
             $table->timestamps();
         });
     }

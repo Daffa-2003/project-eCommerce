@@ -77,16 +77,3 @@
   </div>
 
   
-  <script>
-    function previewImg(){
-      const foto = document.querySelector('#inputFoto')
-      const preview = document.querySelector('.preview')
-      preview.style.display = 'block';
-      const oFReader = new FileReader();
-      oFReader.readAsDataURL(foto.files[0]);
-
-      oFReader.onload = function(oFREvent){
-        preview.src = oFREvent.target.result;
-      }
-    }
-  </script>

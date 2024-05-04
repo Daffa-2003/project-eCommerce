@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $data = User::paginate(5)->where('is_admin', 1);
+        $data = User::where('is_admin', 1)->paginate(5);
         return view('admin.pages.userManagement ', [
             'title' => 'Admin User Management',
             'data' => $data,
@@ -25,6 +25,7 @@ class UserController extends Controller
             'nik' => date('Ymd') . rand(000, 999),
         ]);
     }
+    
     public function store(UserRequest $request)
     {
         $data = new User();
