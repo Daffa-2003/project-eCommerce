@@ -22,12 +22,15 @@ Route::get('/', [Controller::class, 'index'])->name('home');
 
 Route::POST('/addTocart', [TransaksiController::class, 'addTocart'])->name('addTocart');
 
-Route::get('/shop', [Controller::class, 'shop'])->name('shop');
+
+Route::get('/shop/{kategori}/{type}', [Controller::class, 'showKategori'])->name('shop.show');
+
 Route::get('/contact', [Controller::class, 'contact'])->name('contact');
 Route::get('/transaksi', [Controller::class, 'transaksi'])->name('transaksi');
 
 Route::get('/checkout', [Controller::class, 'checkout'])->name('checkout');
 Route::post('/checkout/proses/{id}', [Controller::class, 'prosesCheckout'])->name('checkout.proses');
+Route::delete('/checkout/batal/{id}', [Controller::class, 'batalCheckout'])->name('checkout.batal');
 Route::post('/checkout/prosesPembayaran', [Controller::class, 'prosesPembayaran'])->name('checkout.bayar');
 
 Route::get('/admin', [Controller::class, 'adminLogin'])->name('adminLogin');

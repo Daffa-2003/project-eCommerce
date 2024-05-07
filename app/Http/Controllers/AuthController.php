@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\product;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -64,5 +65,39 @@ class AuthController extends Controller
                 'message' => 'Logout Failed',
             ]);
         }
+    }
+
+    // add product 
+    function addProduct(Request $request)
+    {
+        $sku = 'BRG' . rand(10000, 99999);
+        $data = new product();
+        $data->sku = $sku;
+        $data->name = $request->name;
+        $data->type = $request->type;
+        $data->kategori = $request->kategori;
+        $data->harga = $request->harga;
+        $data->quantity = $request->quantity;
+        $data->discount = 10 / 100;
+        $data->is_active = 1;
+        $data->foto = 'default.jpg';
+        $data->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Successfully add Product',
+            'user' => $data,
+        ]);
+    }
+
+    // get all product
+    function getAllProduct()
+    {
+        $data = product::all();
+        return response()->json([
+            'status' => 200,
+            'message' => 'Successfully get all product',
+            'data' => $data,
+        ]);
     }
 }

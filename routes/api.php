@@ -19,6 +19,8 @@ Route::prefix('auth')->group(function () {
     Route::post('/signin', [AuthController::class, 'SignIn']);
     Route::post('/signup', [AuthController::class, 'SignUp']);
     Route::get('/signout', [AuthController::class, 'SignOut'])->middleware('auth:sanctum');
+    Route::post('/addData', [AuthController::class, 'addProduct']);
+    Route::get('/getData', [AuthController::class, 'getAllProduct']);
 });
 
 Route::get('/tokens', function (Request $request) {

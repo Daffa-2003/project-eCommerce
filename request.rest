@@ -6,3 +6,23 @@ Accept: application/json
     "email": "coba@coba.com",
     "password": "123"
 }
+
+
+
+###
+post http://127.0.0.1:8000/api/auth/addData
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name": "coba",
+    "type" : "celana",
+    "kategori" : "pria",
+    "harga" : "100000",
+    "quantity" : "10"
+}
+
+
+
+###
+GET http://127.0.0.1:8000/api/auth/getData

@@ -22,8 +22,8 @@ class Controller extends BaseController
     // PELANGGAN
     public function index()
     {
-        $best = product::where('quantity_out', '>=', 5)->get();
-        $data = product::paginate(8);
+        $best = product::where('quantity_out', '>=', 5)->where('is_active', 1)->get();
+        $data = product::where('is_active', 1)->paginate(8);
         $contKeranjang = tbl_cart::where(['idUser' => 'guest123', 'status' => 0])->count();
         return view('pelanggan.pages.home', [
             'title' => 'Home',
@@ -32,13 +32,15 @@ class Controller extends BaseController
             'keranjang' => $contKeranjang,
         ]);
     }
-    public function shop()
+
+    public function showKategori($kategori, $type)
     {
+        $produk = product::where(['kategori' => $kategori, 'type' => $type])->where('is_active', 1)->paginate(8);
         $contKeranjang = tbl_cart::where(['idUser' => 'guest123', 'status' => 0])->count();
-        $data = product::paginate(8);
         return view('pelanggan.pages.shop', [
             'title' => 'Shop',
-            'data' => $data, 'keranjang' => $contKeranjang,
+            'produk' => $produk,
+            'keranjang' => $contKeranjang,
         ]);
     }
 
@@ -55,7 +57,7 @@ class Controller extends BaseController
 
     public function contact()
     {
-        $contKeranjang = tbl_cart::count();
+        $contKeranjang = tbl_cart::where(['idUser' => 'guest123', 'status' => 0])->count();
         return view('pelanggan.pages.contact', [
             'title' => 'Contact', 'keranjang' => $contKeranjang,
         ]);
@@ -90,6 +92,13 @@ class Controller extends BaseController
     public function prosesCheckout(Request $request, $id)
     {
         $data = $request->all();
+        $cartItem = tbl_cart::find($id);
+        $product = product::find($cartItem->id_product);
+        if ($data['qty'] > $product->quantity) {
+            Alert::toast('Stok Barang Tidak Cukup', 'error');
+            return back();
+        }
+
         $code = transaksi::count();
         $codeTransaksi =  date('Ymd')  . $code;
 
@@ -112,6 +121,14 @@ class Controller extends BaseController
         tbl_cart::where('id', $id)->update($fieldCart);
         Alert::toast('Checkout Berhasil', 'success');
         return redirect()->route('checkout');
+    }
+
+    public function batalCheckout($id)
+    {
+        $tblProduct = tbl_cart::findOrFail($id);
+        $tblProduct->delete();
+        Alert::toast('Checkout Dibatalkan', 'error');
+        return redirect()->route('home');
     }
 
     public function prosesPembayaran(Request $request)
@@ -140,6 +157,11 @@ class Controller extends BaseController
             $dataProduct = product::where('id', $x->id_product)->first();
             $dataProduct->quantity_out = $dataProduct->quantity_out + $x->qty;
             $dataProduct->quantity = $dataProduct->quantity - $x->qty;
+
+            if ($dataProduct->quantity == 0) {
+                $dataProduct->is_active = 0;
+            }
+
             $dataProduct->save();
         }
         Alert::alert()->success('Transaksi berhasil', 'Ditunggu barangnya');

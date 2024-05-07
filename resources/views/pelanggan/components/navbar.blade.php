@@ -12,7 +12,7 @@
                         href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::path() == 'shop' ? 'active' : '' }}" href="/shop">Shop</a>
+                    <a class="nav-link {{ Request::path() == 'shop' ? 'active' : '' }}" href="/shop/pria/baju">Shop</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ Request::path() == 'contact' ? 'active' : '' }}" href="/contact">Contact</a>

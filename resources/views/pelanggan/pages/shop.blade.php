@@ -8,7 +8,6 @@
                     Kategori
                 </div>
                 <div class="card-body">
-
                     <div class="accordion accordion-flush" id="accordionFlushExample">
                         <div class="accordion-item">
                             <h2 class="accordion-header">
@@ -22,13 +21,19 @@
                                 data-bs-parent="#accordionFlushExample">
                                 <div class="accordion-body ">
                                     <div class="d-flex flex-column gap-3">
-                                        <a href="" class="page-link">
+                                        <a href="{{ route('shop.show', ['kategori' => 'pria', 'type' => 'baju']) }}"
+                                            class="page-link">
                                             <i class="fas fa-plus"></i> Baju Pria
                                         </a>
-                                        <a href="" class="page-link">
+                                        <a href="{{ route('shop.show', ['kategori' => 'pria', 'type' => 'celana']) }}"
+                                            class="page-link">
                                             <i class="fas fa-plus"></i> Celana Pria
                                         </a>
-                                        <a href="" class="page-link">
+                                        <a href="{{ route('shop.show', [
+                                            'kategori' => 'pria',
+                                            'type' => 'aksesoris',
+                                        ]) }}"
+                                            class="page-link">
                                             <i class="fas fa-plus"></i> Aksesoris Pria
                                         </a>
                                     </div>
@@ -47,13 +52,16 @@
                                 data-bs-parent="#accordionFlushExample">
                                 <div class="accordion-body ">
                                     <div class="d-flex flex-column gap-3">
-                                        <a href="" class="page-link">
+                                        <a href="{{ route('shop.show', ['kategori' => 'wanita', 'type' => 'baju']) }}"
+                                            class="page-link">
                                             <i class="fas fa-plus"></i> Baju Wanita
                                         </a>
-                                        <a href="" class="page-link">
+                                        <a href="{{ route('shop.show', ['kategori' => 'wanita', 'type' => 'celana']) }}"
+                                            class="page-link">
                                             <i class="fas fa-plus"></i> Celana Wanita
                                         </a>
-                                        <a href="" class="page-link">
+                                        <a href="{{ route('shop.show', ['kategori' => 'wanita', 'type' => 'aksesoris']) }}"
+                                            class="page-link">
                                             <i class="fas fa-plus"></i> Aksesoris Wanita
                                         </a>
                                     </div>
@@ -72,13 +80,19 @@
                                 data-bs-parent="#accordionFlushExample">
                                 <div class="accordion-body ">
                                     <div class="d-flex flex-column gap-3">
-                                        <a href="" class="page-link">
+                                        <a href="{{ route('shop.show', ['kategori' => 'anak', 'type' => 'baju']) }}"
+                                            class="page-link">
                                             <i class="fas fa-plus"></i> Baju Anak
                                         </a>
-                                        <a href="" class="page-link">
+                                        <a href="{{ route('shop.show', ['kategori' => 'anak', 'type' => 'celana']) }}"
+                                            class="page-link">
                                             <i class="fas fa-plus"></i> Celana Anak
                                         </a>
-                                        <a href="" class="page-link">
+                                        <a href="{{ route('shop.show', [
+                                            'kategori' => 'anak',
+                                            'type' => 'aksesoris',
+                                        ]) }}"
+                                            class="page-link">
                                             <i class="fas fa-plus"></i> Aksesoris Anak
                                         </a>
                                     </div>
@@ -90,10 +104,10 @@
             </div>
         </div>
         <div class="col-md-9 d-flex flex-wrap gap-4 mb-4">
-            @if ($data->isEmpty())
+            @if ($produk->isEmpty())
                 <h1 class="">Product Belum Tersedia</h1>
             @else
-                @foreach ($data as $item    )
+                @foreach ($produk as $item)
                     <div class="card" style="width: 220px">
                         <div class="card-header m-auto" style="height:100%;width:100%;">
                             <img src="{{ asset('storage/product/' . $item->foto) }}" alt="foto "
@@ -107,19 +121,23 @@
                             <p class="m-0" style="font-size: 16px; font-weight:600;">Rp.
                                 {{ number_format($item->harga) }}
                             </p>
-                            <button class="btn btn-outline-primary" style="font-size: 24px">
-                                <i class="fa-solid fa-cart-plus"></i>
-                            </button>
+                            <form action="{{ route('addTocart', $item->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-primary" style="font-size: 24px"
+                                    name="id" value="{{ $item->id }}">
+                                    <i class="fa-solid fa-cart-plus"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 @endforeach
         </div>
         <div class="pagination d-flex flex-row justify-content-between mt-3">
             <div class="showData">
-                <span>Data ditampilkan {{ $data->count() }} dari {{ $data->total() }} </span>
+                <span>Data ditampilkan {{ $produk->count() }} dari {{ $produk->total() }} </span>
             </div>
             <div>
-                {{ $data->links() }}
+                {{ $produk->links() }}
             </div>
         </div>
         @endif
