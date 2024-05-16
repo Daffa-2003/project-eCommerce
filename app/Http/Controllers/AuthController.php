@@ -100,4 +100,49 @@ class AuthController extends Controller
             'data' => $data,
         ]);
     }
+
+    // function get Product by id
+    function getProductById($id)
+    {
+        $data = product::findOrFail($id);
+        return response()->json([
+            'satatus' => 200,
+            'message' => 'Successfully get product by id',
+            'data' => $data,
+        ]);
+    }
+
+    // update product
+    function updateProduct(Request $request, $id)
+    {
+        $data = product::findOrFail($id);
+        $data->sku = $request->sku;
+        $data->name = $request->name;
+        $data->type = $request->type;
+        $data->kategori = $request->kategori;
+        $data->harga = $request->harga;
+        $data->quantity = $request->quantity;
+        $data->discount = 10 / 100;
+        $data->is_active = 1;
+        $data->foto = 'default.jpg';
+        $data->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Successfully Update Product',
+            'user' => $data,
+        ]);
+    }
+
+    // delete product
+    function deleteProduct($id)
+    {
+        $data = product::findOrFail($id);
+        $data->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Successfully delete product',
+        ]);
+    }
 }

@@ -13,7 +13,14 @@ class TransaksiController extends Controller
     public function addTocart(Request $request,)
     {
         $paramsId = $request->input('id');
-        $db = new tbl_cart();
+        $db = tbl_cart::where('idUser', 'guest123')->where('id_product', $paramsId)->where('status', 0)->first();
+        if ($db) {
+            $field = [
+                'qty' => $db->qty + 1,
+            ];
+            $db->update($field);
+            return redirect('/');
+        }
         $data = product::find($paramsId);
         $field = [
             'idUser'    => 'guest123',
@@ -21,7 +28,7 @@ class TransaksiController extends Controller
             'qty'       => 1,
             'price'     => $data->harga,
         ];
-        $db->create($field);
+        tbl_cart::create($field);
         return redirect('/');
     }
 }

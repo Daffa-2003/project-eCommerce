@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [Controller::class, 'index'])->name('home');
 
-Route::POST('/addTocart', [TransaksiController::class, 'addTocart'])->name('addTocart');
+Route::POST('/addTocart/{id}', [TransaksiController::class, 'addTocart'])->name('addTocart');
 
 
 Route::get('/shop/{kategori}/{type}', [Controller::class, 'showKategori'])->name('shop.show');

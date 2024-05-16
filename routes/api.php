@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AuthUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +20,16 @@ Route::prefix('auth')->group(function () {
     Route::post('/signin', [AuthController::class, 'SignIn']);
     Route::post('/signup', [AuthController::class, 'SignUp']);
     Route::get('/signout', [AuthController::class, 'SignOut'])->middleware('auth:sanctum');
-    Route::post('/addData', [AuthController::class, 'addProduct']);
-    Route::get('/getData', [AuthController::class, 'getAllProduct']);
+    // data product
+    Route::post('/addData', [AuthController::class, 'addProduct'])->middleware('auth:sanctum');
+    Route::get('/getData', [AuthController::class, 'getAllProduct'])->middleware('auth:sanctum');
+    Route::get('/getData/{id}', [AuthController::class, 'getProductById'])->middleware('auth:sanctum');
+    Route::put('/updateData/{id}', [AuthController::class, 'updateProduct'])->middleware('auth:sanctum');
+    Route::delete('/deleteData/{id}', [AuthController::class, 'deleteProduct'])->middleware('auth:sanctum');
+    // data user
+    Route::get('/getUser', [AuthUserController::class, 'getUser'])->middleware('auth:sanctum');
+    Route::post('/addUser', [AuthUserController::class, 'addUser'])->middleware('auth:sanctum');
+    Route::delete('/deleteUser/{id}', [AuthUserController::class, ' deleteUser'])->middleware('auth:sanctum');
 });
 
 Route::get('/tokens', function (Request $request) {
