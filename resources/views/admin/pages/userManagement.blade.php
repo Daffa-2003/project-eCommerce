@@ -20,22 +20,12 @@
     <!-- /.content-header -->
     <section class="content">
         <div class="card rounded-full">
-            <div class="card-header d-flex justify-content-between">
-                <div class="filter d-flex flex-lg-row mr-auto" style="gap: 10px;">
-                    <input type="date" class="form-control" name="tgl_awal">
-                    <input type="date" class="form-control" name="tgl_akhir">
-                    <button class="btn btn-primary">Filter</button>
-                </div>
-                <input class="form-control justify-content-between w-25" type="search" placeholder="Search..." />
-            </div>
-        </div>
-        <div class="card rounded-full">
             <div class="card-header t-2">
                 <button class="btn btn-info" id="addUser"><i class="fa-solid fa-plus"></i><span> Tambah
                         User</span></button>
             </div>
             <div class="card-body">
-                <table class="table table-bordered table-hover ">
+                <table id="myDataTable" class="table table-bordered table-hover ">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -53,7 +43,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
                                     <img src="{{ asset('storage/profil/' . $x->foto) }}" alt="foto" width="100px"
-                                        class=" elevation-3" style="border-radius: 25px" height="100px">
+                                        class=" elevation-3" style="border-radius: 50px" height="100px">
                                 </td>
                                 <td>{{ $x->created_at }}</td>
                                 <td>{{ $x->name }}</td>
@@ -83,14 +73,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div class="pagination d-flex flex-row justify-content-between mt-3">
-                    <div class="showData">
-                        <span>Data ditampilkan {{ $data->count() }} dari {{ $data->total() }} </span>
-                    </div>
-                    <div>
-                        {{ $data->links() }}
-                    </div>
-                </div>
+
             </div>
         </div>
         <div class="tampilData" style="display: none;"></div>

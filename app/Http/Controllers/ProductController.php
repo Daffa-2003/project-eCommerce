@@ -13,12 +13,13 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $data = product::paginate(5);
+        $data = product::all();
         return view('admin.pages.product ', [
             'title' => 'Admin Product',
             'data' => $data,
         ]);
     }
+
     public function addModal()
     {
         return view('admin.modals.addModal', [

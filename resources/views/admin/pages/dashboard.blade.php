@@ -66,7 +66,7 @@
                     <!-- small box -->
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3>{{ $hasil }}</h3>
+                            <h3>{{ number_format($hasil) }}</h3>
                             <p>profit</p>
                         </div>
                         <div class="icon">
@@ -77,6 +77,59 @@
                 </div>
             </div>
         </div>
-
+        <div class="mt-2">
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title">Line Chart</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart">
+                        <canvas id="lineChart"
+                            style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;">
+                            <h1>asdas</h1>
+                        </canvas>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
     </section>
+    <script>
+        // Pastikan DOM sudah selesai di-load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dapatkan elemen canvas
+            var ctx = document.getElementById('lineChart').getContext('2d');
+
+            // Buat grafik baru
+            var myChart = new Chart(ctx, {
+                type: 'line', // jenis grafik
+                data: {
+                    labels: @json($month), // label untuk sumbu x
+                    datasets: [{
+                        label: 'Data', // label untuk dataset ini
+                        data: @json($data), // data yang akan ditampilkan
+                        backgroundColor: 'rgba(0, 123, 255, 0.5)', // warna background
+                        borderColor: 'rgba(0, 123, 255, 1)', // warna border
+                        borderWidth: 1 // lebar border
+                    }]
+                },
+                options: {
+                    responsive: true, // grafik akan menyesuaikan ukuran saat ukuran window berubah
+                    scales: {
+                        y: {
+                            beginAtZero: true // sumbu y dimulai dari 0
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 @endsection

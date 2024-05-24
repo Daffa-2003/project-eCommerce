@@ -20,23 +20,14 @@
     <!-- /.content-header -->
     {{-- main content --}}
     <section class="content">
-        <div class="card rounded-full">
-            <div class="card-header d-flex justify-content-between">
-                <div class="filter d-flex flex-lg-row mr-auto" style="gap: 10px;">
-                    <input type="date" class="form-control" name="tgl_awal">
-                    <input type="date" class="form-control" name="tgl_akhir">
-                    <button class="btn btn-primary">Filter</button>
-                </div>
-                <input class="form-control justify-content-between w-25" type="search" placeholder="Search..." />
-            </div>
-        </div>
+
         <div class="card rounded-full">
             <div class="card-header t-2">
                 <button class="btn btn-info" id="addData"><i class="fa-solid fa-plus"></i><span> Tambah
                         Product</span></button>
             </div>
             <div class="card-body">
-                <table class="table table-bordered table-hover ">
+                <table id="myDataTable" class="table table-bordered table-hover ">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -70,25 +61,22 @@
                                     <td>{{ number_format($item->harga) }}</td>
                                     <td>{{ $item->quantity }}</td>
                                     <td>
-                                        <input type="hidden" id="sku" value="{{ $item->sku }}">
-                                        <button class="btn btn-info editModal" data-id="{{ $item->id }}"><i
-                                                class="fa-solid fa-pen-to-square"></i></button>
-                                        <button class="btn btn-danger deleteData" data-id="{{ $item->id }}"><i
-                                                class="fa-solid fa-trash"></i></button>
+                                        @if (Auth::user()->role == 2)
+                                            <input type="hidden" id="sku" value="{{ $item->sku }}">
+                                            <button class="btn btn-info editModal" data-id="{{ $item->id }}"><i
+                                                    class="fa-solid fa-pen-to-square"></i></button>
+                                            <button class="btn btn-danger deleteData" data-id="{{ $item->id }}"><i
+                                                    class="fa-solid fa-trash"></i></button>
+                                        @else
+                                            <span class="badge badge-danger">No Access</span>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
                         @endif
                     </tbody>
                 </table>
-                <div class="pagination d-flex flex-row justify-content-between mt-3">
-                    <div class="showData">
-                        <span>Data ditampilkan {{ $data->count() }} dari {{ $data->total() }} </span>
-                    </div>
-                    <div>
-                        {{ $data->links() }}
-                    </div>
-                </div>
+
             </div>
         </div>
         <div class="tampilData" style="display: none;"></div>

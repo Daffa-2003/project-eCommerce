@@ -42,6 +42,7 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin');
     Route::get('/admin/report', [AdminController::class, 'report'])->name('report');
+    Route::get('/admin/report/filter', [AdminController::class, 'reportFilter'])->name('reportFilter');
 
 
     // user

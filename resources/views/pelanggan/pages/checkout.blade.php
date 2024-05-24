@@ -38,6 +38,7 @@
                                     <option value="jne">JNE Ekspress</option>
                                     <option value="sicepat">Sicepat Ekspress</option>
                                     <option value="ninja">Ninja Ekspress</option>
+                                    <option value="gratis">None</option>
                                 </select>
                             </div>
                         </div>

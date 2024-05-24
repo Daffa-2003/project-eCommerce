@@ -228,6 +228,6 @@ class Controller extends BaseController
         request()->Session()->invalidate();
         request()->Session()->regenerateToken();
         Alert::toast('Berhasil Logout', 'success');
-        return redirect('/admin');
+        return redirect('/');
     }
 }

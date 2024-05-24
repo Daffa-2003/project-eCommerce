@@ -52,8 +52,10 @@ $(document).ready(function () {
             var ongkir = $(".ongkir").val(10000);
         } else if (eksp === "sicepat") {
             var ongkir = $(".ongkir").val(8000);
-        } else {
+        } else if (eksp === "ninja") {
             var ongkir = $(".ongkir").val(9500);
+        } else {
+            var ongkir = $(".ongkir").val(0);
         }
 
         $(".pembayaran").each(function () {
