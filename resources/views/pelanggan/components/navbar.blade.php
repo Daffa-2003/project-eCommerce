@@ -19,8 +19,7 @@
                 </li>
             </ul>
             <div class="d-flex gap-4 align-items-center">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                    data-bs-target="#exampleModal">Login</button>
+                <a href="/admin" class="btn btn-success">Login</a>
                 <div class="notif">
                     <a href="/transaksi" class="fs-5">
                         <i class="fa-solid fa-bag-shopping icon-nav"></i>
